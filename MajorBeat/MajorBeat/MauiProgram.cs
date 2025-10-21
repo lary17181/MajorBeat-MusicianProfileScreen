@@ -2,6 +2,7 @@
 using Microsoft.Maui;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using Syncfusion.Maui.Core.Hosting;
 
 #if ANDROID
 using AndroidX.AppCompat.Widget; // SearchView do AndroidX
@@ -37,6 +38,7 @@ namespace MajorBeat
 
             builder
                 .UseMauiApp<App>()
+           
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -46,7 +48,7 @@ namespace MajorBeat
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
+            builder.ConfigureSyncfusionCore();
             return builder.Build();
         }
     }

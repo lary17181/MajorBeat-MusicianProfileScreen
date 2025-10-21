@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:MajorBeat.ViewModels.Hirer"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
              x:Class="MajorBeat.Views.Hirers.MusicianProfileView"
              Title="MusicianProfileView">
     
@@ -145,34 +146,40 @@
                         </VerticalStackLayout>
                         <Line HorizontalOptions="Start" X1="0" Y1="20" X2="410" Y2="20" Stroke="#4F1271" StrokeThickness="3" Margin="-30,0,0,0" />
                         <VerticalStackLayout Margin="0,30,0,0">
-                            <Label Text="Disponibilidade" FontSize="22" TextColor="#4F1271" FontAttributes="Bold" Margin="0,0,0,10"/>
+                            <Label Text="Disponibilidade" FontSize="22" TextColor="#4F1271" FontAttributes="Bold" Margin="0,0,0,10" HorizontalOptions="Center"/>
                             <VerticalStackLayout Padding="20,10" Spacing="10">
 
-                            <!--calendário -->
-                            <Label Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='{}{0:MMMM yyyy}'}" FontSize="20" FontAttributes="Bold" TextColor="#4F1271" HorizontalOptions="Center" Margin="0,10,0,20"/>
+                                <Grid ColumnDefinitions="Auto,*,Auto" Padding="10,0">
+                                    <Button Text="◀"
+                                        FontSize="20"
+                                        BackgroundColor="Transparent"
+                                        TextColor="Purple"
+                                        Command="{Binding PreviousMonthCommand}" />
 
-                                <CollectionView ItemsSource="{Binding DiasCalendario}" ItemsLayout="VerticalGrid, 7" SelectionMode="None">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Frame Padding="0" HeightRequest="42" WidthRequest="42" CornerRadius="21" BackgroundColor="{Binding CorDia}" HasShadow="False" HorizontalOptions="Center" VerticalOptions="Center">
-                                            <Label Text="{Binding Dia}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="16" TextColor="White" FontAttributes="Bold"/>
-                                            </Frame>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
+                                 
+                                    <Button Text="▶"
+                                        FontSize="20"
+                                        BackgroundColor="Transparent"
+                                        TextColor="Purple"
+                                        Command="{Binding NextMonthCommand}" />
+                                                        </Grid>
 
-                            <!-- Legenda -->
-                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" Margin="0,20,0,10">
-                                    <HorizontalStackLayout Spacing="5">
-                                        <BoxView WidthRequest="14" HeightRequest="14" Color="#BBA1C9" CornerRadius="7"/>
-                                        <Label Text="Ocupado" FontSize="12" TextColor="#BBA1C9"/>
-                                    </HorizontalStackLayout>
+                                <syncfusion:SfCalendar
+                                    x:Name="MusicianCalendar"
+                                    View="Month"
+                                    SelectionMode="Multiple"
+                                    DisplayDate="{Binding CurrentMonth}"
+                                    SelectedDates="{Binding UnavailableDates}"
+                                    Background="Transparent"
+                                    ShowTrailingAndLeadingDates="False"
+                                    HeightRequest="350"
+                                    SelectionBackground="#4f1271"
+                                    TodayHighlightBrush="#4f1271"/>
 
-                                    <HorizontalStackLayout Spacing="5">
-                                        <BoxView WidthRequest="14" HeightRequest="14" Color="#4F1271" CornerRadius="7"/>
-                                        <Label Text="Disponível" FontSize="12" TextColor="#4F1271"/>
-                                    </HorizontalStackLayout>
-                                
+                                <!-- Legenda -->
+                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="0,10,0,0">
+                                    <BoxView WidthRequest="20" HeightRequest="20" Color="#4f1271"/>
+                                    <Label Text="Dias indisponíveis" TextColor="Black"/>
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </VerticalStackLayout>

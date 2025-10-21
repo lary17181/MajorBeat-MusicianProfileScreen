@@ -6,7 +6,9 @@ using Microsoft.Maui.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MajorBeat.ViewModels.Hirer;
 
@@ -26,8 +28,26 @@ public partial class MusicianProfileViewModel : ObservableObject
         public string LinkInsta { get; private set; }
         public string LinkTwitter { get; private set; }
 
-    
-     public ObservableCollection<string> Images { get; } = new()
+
+    [ObservableProperty]
+    private DateTime currentMonth = DateTime.Now;
+
+    public ObservableCollection<DateTime> UnavailableDates { get; set; } = new ObservableCollection<DateTime>
+{
+    DateTime.Today.AddDays(2),
+    DateTime.Today.AddDays(5),
+    DateTime.Today.AddDays(9),
+    DateTime.Today.AddDays(12),
+    DateTime.Today.AddDays(17),
+    DateTime.Today.AddDays(25)
+};
+
+    public ICommand NextMonthCommand { get; }
+    public ICommand PreviousMonthCommand { get; }
+
+    public string CurrentMonthDisplay => CurrentMonth.ToString("MMMM yyyy", new CultureInfo("pt-BR"));
+
+    public ObservableCollection<string> Images { get; } = new()
         {
           "musicianprofile1.png",
           "musicianprofile2.png",
@@ -35,11 +55,6 @@ public partial class MusicianProfileViewModel : ObservableObject
          };
 
     [ObservableProperty] private int currentIndex;
-
-    public ObservableCollection<DiaCalendario> DiasCalendario { get; } = new();
-
-    private readonly int[] diasDisponiveisExemplo = new int[] { 2, 5, 8, 12, 16, 19, 23, 27 };
-    private readonly int[] diasOcupadosExemplo = new int[] { 3, 9, 14, 18, 25 };
 
     public MusicianProfileViewModel()
     {
@@ -57,8 +72,27 @@ public partial class MusicianProfileViewModel : ObservableObject
         LinkInsta = "marcos.jose";
         LinkTwitter = "marcos.jose";
 
-        CarregarDiasCalendario(DateTime.Today);
+
+        NextMonthCommand = new Command(() =>
+        {
+            CurrentMonth = CurrentMonth.AddMonths(1);
+            OnPropertyChanged(nameof(CurrentMonth));
+            OnPropertyChanged(nameof(CurrentMonthDisplay));
+        });
+
+        PreviousMonthCommand = new Command(() =>
+        {
+            CurrentMonth = CurrentMonth.AddMonths(-1);
+            OnPropertyChanged(nameof(CurrentMonth));
+            OnPropertyChanged(nameof(CurrentMonthDisplay));
+        });
     }
+
+        private void ChangeMonth(int offset)
+        {
+            CurrentMonth = CurrentMonth.AddMonths(offset);
+            OnPropertyChanged(nameof(CurrentMonthDisplay));
+        }
 
     public MusicianProfileViewModel(Musico musico)
     {
@@ -90,34 +124,6 @@ public partial class MusicianProfileViewModel : ObservableObject
             foreach (var url in musico.mediaUrl)
                 Images.Add(url);
         }
-
-        CarregarDiasCalendario(DateTime.Today);
-    }
-
-    public void CarregarDiasCalendario(DateTime referenceDate)
-    {
-        DiasCalendario.Clear();
-
-        var primeiro = new DateTime(referenceDate.Year, referenceDate.Month, 1);
-        int diasNoMes = DateTime.DaysInMonth(referenceDate.Year, referenceDate.Month);
-
-        for (int d = 1; d <= diasNoMes; d++)
-        {
-            Color cor;
-
-            if (diasDisponiveisExemplo.Contains(d))
-                cor = Color.FromArgb("#4F1271"); 
-            else
-                cor = Color.FromArgb("#BBA1C9");
-
-            DiasCalendario.Add(new DiaCalendario
-            {
-                Dia = d.ToString(),
-                CorDia = cor,
-                Data = new DateTime(referenceDate.Year, referenceDate.Month, d),
-                Disponivel = cor == Color.FromArgb("#4F1271")
-            });
-        }
     }
 
         public void SetCarouselIndex(int index)
@@ -138,11 +144,4 @@ public partial class MusicianProfileViewModel : ObservableObject
             if (CurrentIndex > 0) CurrentIndex--;
         }
 }
-        public class DiaCalendario
-        {
-            public string Dia { get; set; }
-            public Color CorDia { get; set; }
-            public DateTime Data { get; set; }
-            public bool Disponivel { get; set; }
-}
-
+        
