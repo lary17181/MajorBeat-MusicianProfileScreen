@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MajorBeat.Enums
 {
-    public enum GeneroEnum
+    public enum Role
     {
-        Pagode,
-        Sertanejo,
-        Gospel
+        ROLE_MUSICO,
+        ROLE_CONTRATANTE,
+        ROLE_ADMIN
     }
 }

@@ -1,49 +1,94 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MajorBeat.Models;
-using MajorBeat.Enums;
+using MajorBeat.Services.Users;
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
+using MajorBeat.Views.Musicians;
+using MajorBeat.Views.Hirers;
+using System.Diagnostics;
+using MajorBeat.Enums;
 
 namespace MajorBeat.ViewModels.Musician
 {
-    public class MusicianEventViewModel
+    public partial class MusicianEventViewModel : ObservableObject
     {
-        public Evento Evento { get; set; }
+        private readonly EventService _eventService;
 
-        public string Titulo => Evento.Titulo;
-        public string Descricao => Evento.Descricao;
-        public string Endereco => Evento.Endereco;
-        public DateTime Data => Evento.Data;
-        public TimeSpan HoraInicio => Evento.HoraInicio;
-        public TimeSpan HoraFim => Evento.HoraFim;
-        public Contratante Contratante => Evento.Contratante;
-        public ObservableCollection<GeneroEnum> NomeGenero => Evento.NomeGenero;
-        public ObservableCollection<InstrumentoEnum> NomeInstrumento => Evento.NomeInstrumento;
-        public ObservableCollection<byte[]> ImagemLocalEvento => Evento.ImagemLocalEvento;
+        [ObservableProperty] private Evento evento;
 
-       
-        public MusicianEventViewModel(Evento evento)
+        [ObservableProperty] private bool isBusy;
+
+        [ObservableProperty] private int totalImages;
+
+        [ObservableProperty] private int imageIndice;
+
+        public ObservableCollection<string> ImagensMock => new()
+{
+        "panelao.png"
+        };
+        public string CountImages => TotalImages > 0 ? $"{ImageIndice + 1} / {TotalImages}" : "0 / 0";
+
+        public MusicianEventViewModel(Evento _evento)
         {
-            Evento = evento;
-            Evento = new Evento
-            {
-                Titulo = "Panelão do Norte",
-                Descricao = "Uma noite especial com artistas locais e muita música sertaneja. Ambiente descontraído, boa comida e ótimo público!",
-                Endereco = "Rua Alcântara, 113 - Vila Guilherme, São Paulo",
-                Data = new DateTime(2025, 11, 20),
-                HoraInicio = new TimeSpan(20, 0, 0),
-                HoraFim = new TimeSpan(23, 30, 0),
-                NomeGenero = new ObservableCollection<GeneroEnum> { GeneroEnum.Sertanejo, GeneroEnum.Gospel },
-                NomeInstrumento = new ObservableCollection<InstrumentoEnum> { InstrumentoEnum.Violão, InstrumentoEnum.Bateria },
-                ImagemLocalEvento = new ObservableCollection<byte[]>
-                {
-                    
-                },
-                Contratante = new Contratante
-                {
-                    Nome = "Por: Panelão do Norte Produções"
-                }
-            };
-        }
-        
+            _eventService = new EventService();
 
+            Evento = _evento;
+
+            if (Evento != null)
+            {
+                InicializarCarrossel();
+            }
+            /*Evento = _evento;
+            LoadEventDataCommand.ExecuteAsync(_evento.IdEvento);
+
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(ImageIndice))
+                {
+                    OnPropertyChanged(nameof(CountImages));
+                }
+            };*/
+        }
+
+        private void InicializarCarrossel()
+        {
+            if (Evento?.ImagemLocalEvento != null && Evento.ImagemLocalEvento.Count > 0)
+            {
+                TotalImages = Evento.ImagemLocalEvento.Count;
+                ImageIndice = 0;
+            }
+            else
+            {
+                TotalImages = 0;
+                ImageIndice = 0;
+            }
+
+        }
+
+        /*[RelayCommand]
+        public async Task LoadEventData(long id)
+        {
+            try
+            {
+                isBusy = true;
+                var eventoResult = await _eventService.GetEventById(id);
+
+                if (eventoResult != null)
+                {
+                    Evento = eventoResult;
+                    InicializarCarrossel();
+                }
+                else
+                {
+                    Debug.WriteLine($"[ERRO DE DADOS] Evento com ID {id} não encontrado na API.");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Erro", $"Falha ao carregar detalhes do evento: {ex.Message}", "OK");
+                await Shell.Current.GoToAsync("..");
+            }
+        }*/
     }
 }

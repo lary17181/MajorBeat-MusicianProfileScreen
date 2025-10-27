@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:vm="clr-namespace:MajorBeat.ViewModels.Hirer"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
              x:Class="MajorBeat.Views.Hirers.MusicianProfileView"
              Title="MusicianProfileView">
     
@@ -28,7 +28,8 @@
                         </CarouselView.ItemTemplate>
                     </CarouselView>
                     <Frame HorizontalOptions="End"  VerticalOptions="Start" Margin="0,35,20,0" BackgroundColor="#4F1271" HeightRequest="40" WidthRequest="45" CornerRadius="12" Padding="8">
-                        <Label x:Name="PositionLabel" Text="1/3" FontSize="16" TextColor="White" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+                        <Label Text="{Binding ImageCounter}" FontSize="16" TextColor="White" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+                        
                     </Frame>
                 </Grid>
 
@@ -54,40 +55,40 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="2"/>
                             </Grid.RowDefinitions>
-                            <Label x:Name="TabGaleria" Text="Galeria" FontSize="25" TextColor="#4F1271" FontAttributes="Bold">
+                            <Label x:Name="TabGaleria" Text="Galeria" FontSize="25" TextColor="{Binding TabGaleriaTextColor}" FontAttributes="{Binding TabGaleriaFontAttributes}">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnGaleriaTapped"/>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="Galeria"/>
                                 </Label.GestureRecognizers>
                             </Label>
-                            <BoxView x:Name="BoxViewGaleria" Grid.Row="1" HeightRequest="4"  BackgroundColor="#4F1271" HorizontalOptions="Start" WidthRequest="90" />
+                            <BoxView x:Name="BoxViewGaleria" Grid.Row="1" HeightRequest="{Binding BoxViewGaleriaHeightRequest}"  BackgroundColor="{Binding BoxViewGaleriaBackgroundColor}" HorizontalOptions="Start" WidthRequest="90" />
                         </Grid>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="2"/>
                             </Grid.RowDefinitions>
-                            <Label x:Name="TabSobre" Text="Sobre" FontSize="25" TextColor="#783F8E" Padding="50,0,50,0" FontAttributes="None" HorizontalOptions="Center">
+                            <Label x:Name="TabSobre" Text="Sobre" FontSize="25" TextColor="{Binding TabSobreTextColor}" Padding="50,0,50,0" FontAttributes="{Binding TabSobreFontAttributes}" HorizontalOptions="Center">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSobreTapped"/>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="Sobre"/>
                                 </Label.GestureRecognizers>
                             </Label>
-                            <BoxView x:Name="BoxViewSobre" Grid.Row="1" HeightRequest="3" BackgroundColor="#783F8E" WidthRequest="90"/>
+                            <BoxView x:Name="BoxViewSobre" Grid.Row="1" HeightRequest="{Binding BoxViewSobreHeightRequest}" BackgroundColor="{Binding BoxViewSobreBackgroundColor}" WidthRequest="90"/>
                         </Grid>
                         <Grid Margin="-25,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="2"/>
                             </Grid.RowDefinitions>
-                            <Label x:Name="TabAvaliacoes" Text="Avaliações" FontSize="25" TextColor="#783F8E" Padding="20,0,20,0" FontAttributes="None" HorizontalOptions="End">
+                            <Label x:Name="TabAvaliacoes" Text="Avaliações" FontSize="25" TextColor="{Binding TabAvaliacoesTextColor}" Padding="20,0,20,0" FontAttributes="{Binding TabAvaliacoesFontAttributes}" HorizontalOptions="End">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnAvaliacoesTapped" />
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="Avaliacoes"/>
                                 </Label.GestureRecognizers>
                             </Label>
-                            <BoxView x:Name="BoxViewAvaliacoes" Grid.Row="1" HeightRequest="3" BackgroundColor="#783F8E" WidthRequest="120" />
+                            <BoxView x:Name="BoxViewAvaliacoes" Grid.Row="1" HeightRequest="{Binding BoxViewAvaliacoesHeightRequest}" BackgroundColor="{Binding BoxViewAvaliacoesBackgroundColor}" WidthRequest="120" />
                         </Grid>
                     </StackLayout>
 
-                    <StackLayout x:Name="galeriaStack" Orientation="Vertical" Margin="3,20,0,90" IsVisible="True">
+                    <StackLayout x:Name="galeriaStack" Orientation="Vertical" Margin="3,0,0,90" IsVisible="{Binding IsGaleriaVisible}">
                         <StackLayout Orientation="Horizontal">
                             <Image Source="imagepost.png" WidthRequest="130" />
                             <Image Source="imagepost.png" WidthRequest="130" Margin="5,0,5,0" />
@@ -101,10 +102,11 @@
                     </StackLayout>
 
                             <!-- Sobre -->
-                    <StackLayout x:Name="sobreStack" Orientation="Vertical" IsVisible="False" Margin="25,20,25,90">
-                        <Label Text="{Binding Biografia}"
+                    <StackLayout x:Name="sobreStack" Orientation="Vertical" IsVisible="{Binding IsSobreVisible}" Margin="25,0,25,90">
+                        <Label Text="{Binding Biografia}" 
                        TextColor="#4F1271"
-                       FontAttributes="Bold"/>
+                       FontAttributes="Bold"
+                       />
                         <HorizontalStackLayout HorizontalOptions="Center" Spacing="120" Margin="0,20,0,0">
                             <Label Text="Gêneros: " FontAttributes="Bold" TextColor="#4F1271" HorizontalOptions="Center" Margin="20,0,0,10" FontSize="16"/>
                             <Label Text="Instrumentos :" FontAttributes="Bold" TextColor="#4F1271" HorizontalOptions="Center" Margin="-20,0,0,10"  FontSize="16"/>
@@ -149,22 +151,9 @@
                             <Label Text="Disponibilidade" FontSize="22" TextColor="#4F1271" FontAttributes="Bold" Margin="0,0,0,10" HorizontalOptions="Center"/>
                             <VerticalStackLayout Padding="20,10" Spacing="10">
 
-                                <Grid ColumnDefinitions="Auto,*,Auto" Padding="10,0">
-                                    <Button Text="◀"
-                                        FontSize="20"
-                                        BackgroundColor="Transparent"
-                                        TextColor="Purple"
-                                        Command="{Binding PreviousMonthCommand}" />
 
-                                 
-                                    <Button Text="▶"
-                                        FontSize="20"
-                                        BackgroundColor="Transparent"
-                                        TextColor="Purple"
-                                        Command="{Binding NextMonthCommand}" />
-                                                        </Grid>
-
-                                <syncfusion:SfCalendar
+                                <Grid>
+                                    <calendar:SfCalendar
                                     x:Name="MusicianCalendar"
                                     View="Month"
                                     SelectionMode="Multiple"
@@ -174,8 +163,23 @@
                                     ShowTrailingAndLeadingDates="False"
                                     HeightRequest="350"
                                     SelectionBackground="#4f1271"
-                                    TodayHighlightBrush="#4f1271"/>
-
+                                    TodayHighlightBrush="#4f1271"
+                                    VerticalOptions="FillAndExpand"
+                                    HorizontalOptions="FillAndExpand"
+                                    EnablePastDates="False"
+                                    >
+                                    <calendar:SfCalendar.MonthView>
+                                            <calendar:CalendarMonthView>
+                                                <calendar:CalendarMonthView.HeaderView>
+                                                    <calendar:CalendarMonthHeaderView TextFormat="ddd" Height="40"/>
+                                                </calendar:CalendarMonthView.HeaderView>
+                                        
+                                        </calendar:CalendarMonthView>
+                                    </calendar:SfCalendar.MonthView>
+                                </calendar:SfCalendar>
+                                    
+                                    <Line HorizontalOptions="Start" X1="0" Y1="20" X2="320" Y2="20" Stroke="#4F1271" StrokeThickness="3" Margin="0,46,0,0" />
+                                </Grid>
                                 <!-- Legenda -->
                                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" Margin="0,10,0,0">
                                     <BoxView WidthRequest="20" HeightRequest="20" Color="#4f1271"/>
@@ -183,6 +187,8 @@
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </VerticalStackLayout>
+                        
+                        <!--Informations-->
                         <Line HorizontalOptions="Start" X1="0" Y1="20" X2="410" Y2="20" Stroke="#4F1271" StrokeThickness="3" Margin="-30,0,0,0" />
                         <StackLayout Orientation="Horizontal" Margin="0,20,0,0">
                             <Image Source="emailicon.png" WidthRequest="40" />
@@ -211,8 +217,8 @@
                         </StackLayout>
                     </StackLayout>
 
-                            <!-- Avaliações -->
-                    <StackLayout x:Name="avaliacoesStack" IsVisible="False" Margin="0,20,0,90">
+                         <!-- Avaliações -->
+                    <StackLayout x:Name="avaliacoesStack" IsVisible="{Binding IsAvaliacoesVisible}" Margin="0,0,0,90">
                         <StackLayout Orientation="Horizontal">
                             <Grid Margin="30,0,0,0">
                                 <Grid.RowDefinitions>
@@ -250,7 +256,7 @@
                                     <Image Source="profilepicture.png" HeightRequest="50" VerticalOptions="Start" Margin="10,10,15,0"/>
                                     <Label Text="Restaurante" TextColor="#4F1271" FontAttributes="Bold" FontSize="19" Margin="0,15,0,0"/>
                                     <StackLayout Orientation="Horizontal" Margin="120,10,0,0" >
-                                        <Label Text="4,0" TextColor="#4F1271" FontAttributes="Bold" Margin="0,10,0,0"/>
+                                        <Label Text="4,1" TextColor="#4F1271" FontAttributes="Bold" Margin="0,10,0,0"/>
                                         <StackLayout Orientation="Vertical" Margin="0,10,0,0">
                                             <Image Source="starrounded.png" HeightRequest="20" />
                                             <Label Text="29/07" TextColor="#4F1271" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -266,7 +272,7 @@
                                     <Image Source="profilepicture.png" HeightRequest="50" VerticalOptions="Start" Margin="10,10,15,0"/>
                                     <Label Text="Restaurante" TextColor="#4F1271" FontAttributes="Bold" FontSize="19" Margin="0,15,0,0"/>
                                     <StackLayout Orientation="Horizontal" Margin="120,10,0,0" >
-                                        <Label Text="4,0" TextColor="#4F1271" FontAttributes="Bold" Margin="0,10,0,0"/>
+                                        <Label Text="4,2" TextColor="#4F1271" FontAttributes="Bold" Margin="0,10,0,0"/>
                                         <StackLayout Orientation="Vertical" Margin="0,10,0,0">
                                             <Image Source="starrounded.png" HeightRequest="20" />
                                             <Label Text="29/07" TextColor="#4F1271" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -300,11 +306,11 @@
             </Frame>
 
             <Frame Grid.Column="2" WidthRequest="50" HeightRequest="50" CornerRadius="25" BackgroundColor="#AE92BD" HorizontalOptions="Center" VerticalOptions="Center" HasShadow="True">
-                <Image Source="chathome.png" WidthRequest="24" HeightRequest="24"/>
+                <ImageButton Source="chathome.png" WidthRequest="24" HeightRequest="24"/>
             </Frame>
 
             <Frame Grid.Column="3" WidthRequest="50" HeightRequest="50" CornerRadius="25" BackgroundColor="#AE92BD" HorizontalOptions="Center" VerticalOptions="Center" HasShadow="True">
-                <Image Source="calendar.png" WidthRequest="24" HeightRequest="24"/>
+                <ImageButton Source="calendar.png" WidthRequest="24" HeightRequest="24" Clicked="calendar_page_btn_Clicked"/>
             </Frame>
 
             <Frame Grid.Column="4" WidthRequest="50" HeightRequest="50" CornerRadius="25" BackgroundColor="#783F8E" HorizontalOptions="Center" VerticalOptions="Center" HasShadow="True">

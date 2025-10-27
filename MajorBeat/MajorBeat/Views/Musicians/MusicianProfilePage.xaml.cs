@@ -8,7 +8,7 @@ namespace MajorBeat.Views.Musicians;
 
 public partial class MusicianProfilePage : ContentPage
 {
-    private ProfileMusicianViewModel _viewModel;
+    /*private ProfileMusicianViewModel _viewModel;
 
     public MusicianProfilePage()
     {
@@ -22,8 +22,8 @@ public partial class MusicianProfilePage : ContentPage
             Biografia = "Oi, eu sou o Marquinhos. Minha música é um pedaço de mim, uma mistura das minhas raízes e das minhas descobertas pelo caminho. Minha música é essa mistura de influências, uma mistura que vem do coração, mas também de uma busca constante por novas formas de me expressar.",
 
             // Atribuindo uma lista de instrumentos e gêneros
-            Instrumentos = new List<InstrumentoEnum> { InstrumentoEnum.Guitarra },
-            Generos = new List<GeneroEnum> { GeneroEnum.Sertanejo },
+            Instrumentos = new List<NomeInstrumento> { NomeInstrumento.VOZ, NomeInstrumento.VIOLAO },
+            Generos = new List<NomeGenero> { NomeGenero.MPB, NomeGenero.SERTANEJO },
 
             // Outros campos
             Email = "marcos.jose123@gmail.com",
@@ -167,5 +167,5 @@ public partial class MusicianProfilePage : ContentPage
             BoxViewAvaliacoes.HeightRequest = 3;
             BoxViewAvaliacoes.BackgroundColor = Color.FromArgb("#783F8E");
         }
-    }
+    }*/
 }

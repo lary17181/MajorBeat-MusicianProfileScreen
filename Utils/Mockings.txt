@@ -1,0 +1,73 @@
+dados de mock pra teste eventview
+
+    private byte[] GetValidMockImageBytes(string resourceName)
+    {
+        // Obtém o Assembly atual para encontrar o recurso embarcado
+        var assembly = Assembly.GetExecutingAssembly();
+
+        // Tenta carregar a imagem real embarcada
+        using var stream = assembly.GetManifestResourceStream(resourceName);
+
+        if (stream != null)
+        {
+            // 💡 Retorna os bytes REAIS da imagem placeholder!
+            byte[] imageBytes = new byte[stream.Length];
+            stream.Read(imageBytes, 0, (int)stream.Length);
+            return imageBytes;
+        }
+
+        // Se o recurso não for encontrado, o erro é no caminho do recurso.
+        // Retorna array vazio, mas loga.
+        Debug.WriteLine($"ERRO CRÍTICO MOCK: Recurso embarcado não encontrado: {resourceName}");
+        return new byte[0]; // Retorna array vazio.
+    }
+    public async Task<Evento> GetEventById(long id)
+    {
+        await Task.Delay(500);
+
+        // 🚨 Use o nome exato do recurso embarcado (Projeto.Pasta.Arquivo.extensao)
+        // Se for Windows, pode ser MajorBeat.Resources.Images.panelao.png
+        var validBytes = GetValidMockImageBytes("MajorBeat.Resources.Images.panelao.png");
+
+        // Garante que pelo menos 3 imagens mockadas válidas sejam enviadas.
+        var mockImageList = new ObservableCollection<byte[]>
+{
+    validBytes,
+    validBytes,
+    validBytes
+};
+
+        // 2. Retorna o objeto Evento completo e mockado
+        return new Evento
+        {
+            IdEvento = id, // Usa o ID passado, o que é bom para debug
+            Titulo = $"Evento MOCKADO (ID: {id})",
+            Descricao = "O carrossel e o contador estão funcionando! Este texto confirma que o serviço mockado foi chamado com sucesso.",
+            Contratante = new Contratante { Nome = "Serviço de Teste Automático" },
+            Endereco = "Rua do Mock, 101, Teste/BR",
+            ImagemLocalEvento = mockImageList,
+            Data = DateTime.Now.AddDays(10),
+            HoraInicio = new TimeSpan(21, 0, 0),
+            HoraFim = new TimeSpan(23, 0, 0),
+
+            // Dados de rolagem: 3 imagens para validar o Carrossel e o Contador (1/3)
+        
+            NomeGenero = new ObservableCollection<NomeGenero> { NomeGenero.ROCK, NomeGenero.MPB },
+            NomeInstrumento = new ObservableCollection<NomeInstrumento> { NomeInstrumento.VIOLAO, NomeInstrumento.VOZ }
+        };
+
+        // -----------------------------------------------------------------
+        // FIM DO MOCKING TEMPORÁRIO
+        // -----------------------------------------------------------------
+
+        // -----------------------------------------------------------------
+        // ❌ CÓDIGO ORIGINAL DA API (DEVE SER COMENTADO OU REMOVIDO TEMPORARIAMENTE)
+        // -----------------------------------------------------------------
+        /* string urlComplementar = $"/getById/{id}";
+        Evento evento = await _request.GetAsync<Evento>(_baseUrl + urlComplementar, _token);
+        return evento;
+        */
+        /*string urlComplementar = $"/getById/{id}";
+        Evento evento = await _request.GetAsync<Evento>(_baseUrl + urlComplementar, _token);
+        return evento; */
+    }

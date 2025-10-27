@@ -2,68 +2,130 @@
 using CommunityToolkit.Mvvm.Input;
 using MajorBeat.Enums;
 using MajorBeat.Models;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
+using MajorBeat.Views.Hirers;
+using MajorBeat.Views.Musicians;
+using MajorBeat.Services.Musicians;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Metrics;
 using System.Globalization;
-using System.Linq;
-using System.Windows.Input;
 
 namespace MajorBeat.ViewModels.Hirer;
 
 public partial class MusicianProfileViewModel : ObservableObject
 {
-        public Musico Musico { get; set; } 
-        public string Username { get; private set; }
-        public string Nome { get; private set; }
-        public string Biografia { get; private set; }
-        public ObservableCollection<InstrumentoEnum> Instrumentos { get; private set; } = new();
-        public ObservableCollection<GeneroEnum> Generos { get; private set; } = new();
-        public string Email { get; private set; }
-        public string Logradouro { get; private set; }
-        public string Telefone { get; private set; }
-        public string LinkFacebook { get; private set; }
-        public string LinkLinkdin { get; private set; }
-        public string LinkInsta { get; private set; }
-        public string LinkTwitter { get; private set; }
+    private readonly MusicianService _musicianService;
 
+    [ObservableProperty] private Musico musico;
 
-    [ObservableProperty]
-    private DateTime currentMonth = DateTime.Now;
+    [ObservableProperty] private string username;
 
-    public ObservableCollection<DateTime> UnavailableDates { get; set; } = new ObservableCollection<DateTime>
-{
-    DateTime.Today.AddDays(2),
-    DateTime.Today.AddDays(5),
-    DateTime.Today.AddDays(9),
-    DateTime.Today.AddDays(12),
-    DateTime.Today.AddDays(17),
-    DateTime.Today.AddDays(25)
-};
+    [ObservableProperty] private string nome;
 
-    public ICommand NextMonthCommand { get; }
-    public ICommand PreviousMonthCommand { get; }
+    [ObservableProperty] private string biografia;
 
+    [ObservableProperty] private ObservableCollection<NomeInstrumento> instrumentos = new();
+
+    [ObservableProperty] private ObservableCollection<NomeGenero> generos = new();
+
+    [ObservableProperty] private string email;
+
+    [ObservableProperty] private string logradouro;
+
+    [ObservableProperty] private string telefone;
+
+    [ObservableProperty] private string linkFacebook;
+
+    [ObservableProperty] private string linkLinkdin;
+
+    [ObservableProperty] private string linkInsta;
+
+    [ObservableProperty] private string linkTwitter;
+
+    [ObservableProperty] private DateTime currentMonth = DateTime.Now;
+
+    private int _currentIndex;
+    public int CurrentIndex
+    {
+        get => _currentIndex;
+        set
+        {
+            if (SetProperty(ref _currentIndex, value))
+            {
+                OnPropertyChanged(nameof(ImageCounter));
+            }
+        }
+    }
+
+    private ObservableCollection<string> _images = new()
+    {
+        "musicianprofile1.png",
+        "musicianprofile2.png",
+        "musicianprofile3.png"
+    };
+
+    public ObservableCollection<string> Images
+    {
+        get => _images;
+        set
+        {
+            if (SetProperty(ref _images, value))
+            {
+                OnPropertyChanged(nameof(TotalImages));
+                OnPropertyChanged(nameof(ImageCounter));
+            }
+        }
+    }
+
+    public int TotalImages => _images?.Count ?? 0;
+    public string ImageCounter => $"{CurrentIndex + 1}/{TotalImages}";
     public string CurrentMonthDisplay => CurrentMonth.ToString("MMMM yyyy", new CultureInfo("pt-BR"));
 
-    public ObservableCollection<string> Images { get; } = new()
-        {
-          "musicianprofile1.png",
-          "musicianprofile2.png",
-          "musicianprofile3.png"
-         };
+    [ObservableProperty] private bool isGaleriaVisible;
 
-    [ObservableProperty] private int currentIndex;
+    [ObservableProperty] private bool isSobreVisible;
 
+    [ObservableProperty] private bool isAvaliacoesVisible;
+
+    [ObservableProperty] private Color tabGaleriaTextColor;
+
+    [ObservableProperty] private Color tabSobreTextColor;
+
+    [ObservableProperty] private Color tabAvaliacoesTextColor;
+
+    [ObservableProperty] private Color boxViewGaleriaBackgroundColor;
+
+    [ObservableProperty] private Color boxViewSobreBackgroundColor;
+
+    [ObservableProperty] private Color boxViewAvaliacoesBackgroundColor;
+
+    [ObservableProperty] private FontAttributes tabGaleriaFontAttributes;
+
+    [ObservableProperty] private FontAttributes tabSobreFontAttributes;
+
+    [ObservableProperty] private FontAttributes tabAvaliacoesFontAttributes;
+
+    [ObservableProperty] private double boxViewGaleriaHeightRequest;
+
+    [ObservableProperty] private double boxViewSobreHeightRequest;
+
+    [ObservableProperty] private double boxViewAvaliacoesHeightRequest;
+
+    private readonly Color _activeTabColor = Color.FromArgb("#4F1271");
+    private readonly Color _inactiveTabColor = Color.FromArgb("#783F8E");
+    private const double _activeBoxHeight = 4;
+    private const double _inactiveBoxHeight = 3;
+    private const FontAttributes _activeFont = FontAttributes.Bold;
+    private const FontAttributes _inactiveFont = FontAttributes.None;
     public MusicianProfileViewModel()
     {
-        // Valores default que aparecem na view enquanto não houver API
+        _musicianService = new MusicianService();
+
+        // Valores temporários antes de vir da API
         Username = "Marquinhos";
         Nome = "Marcos José";
-        Biografia = "Oi, eu sou o Marquinhos. Minha música é um pedaço de mim...";
-        Instrumentos = new ObservableCollection<InstrumentoEnum> { InstrumentoEnum.Guitarra, InstrumentoEnum.Violão };
-        Generos = new ObservableCollection<GeneroEnum> { GeneroEnum.Sertanejo, GeneroEnum.Gospel };
+        Biografia = "Oi, eu sou o Marquinhos. Minha música é um pedaço de mim, uma mistura das minhas raízes e das minhas descobertas pelo caminho.";
+        Instrumentos = new ObservableCollection<NomeInstrumento> { NomeInstrumento.VOZ, NomeInstrumento.VIOLAO };
+        Generos = new ObservableCollection<NomeGenero> { NomeGenero.SERTANEJO, NomeGenero.MPB };
         Email = "marcos.jose123@gmail.com";
         Logradouro = "R. Alcântara, 113 - Vila Guilherme, São Paulo - SP";
         Telefone = "(11) 99999-9999";
@@ -72,45 +134,32 @@ public partial class MusicianProfileViewModel : ObservableObject
         LinkInsta = "marcos.jose";
         LinkTwitter = "marcos.jose";
 
-
-        NextMonthCommand = new Command(() =>
-        {
-            CurrentMonth = CurrentMonth.AddMonths(1);
-            OnPropertyChanged(nameof(CurrentMonth));
-            OnPropertyChanged(nameof(CurrentMonthDisplay));
-        });
-
-        PreviousMonthCommand = new Command(() =>
-        {
-            CurrentMonth = CurrentMonth.AddMonths(-1);
-            OnPropertyChanged(nameof(CurrentMonth));
-            OnPropertyChanged(nameof(CurrentMonthDisplay));
-        });
+        SelectTab("Galeria");
     }
 
-        private void ChangeMonth(int offset)
-        {
-            CurrentMonth = CurrentMonth.AddMonths(offset);
-            OnPropertyChanged(nameof(CurrentMonthDisplay));
-        }
-
     public MusicianProfileViewModel(Musico musico)
+    {
+        _musicianService = new MusicianService();
+        SetMusicianData(musico);
+
+        SelectTab("Galeria");
+    }
+
+    private void SetMusicianData(Musico musico)
     {
         if (musico == null) return;
 
         Musico = musico;
-
         Nome = musico.nome;
         Username = musico.apelido ?? musico.nome;
         Biografia = musico.biografia;
         Email = musico.email;
         Telefone = musico.telefone;
         Logradouro = musico.endereco;
+        Instrumentos = musico.nomeInstrumento ?? new ObservableCollection<NomeInstrumento>();
+        Generos = musico.nomeGenero ?? new ObservableCollection<NomeGenero>();
 
-        Instrumentos = musico.nomeInstrumento ?? new ObservableCollection<InstrumentoEnum>();
-        Generos = musico.nomeGenero ?? new ObservableCollection<GeneroEnum>();
-
-        if (musico.links != null && musico.links.Count >= 4)
+        if (musico.links != null)
         {
             LinkFacebook = musico.links.ElementAtOrDefault(0);
             LinkLinkdin = musico.links.ElementAtOrDefault(1);
@@ -118,30 +167,82 @@ public partial class MusicianProfileViewModel : ObservableObject
             LinkTwitter = musico.links.ElementAtOrDefault(3);
         }
 
-        if (musico.mediaUrl != null && musico.mediaUrl.Count > 0)
+        _images.Clear();
+        if (musico.mediaUrl != null && musico.mediaUrl.Any())
         {
-            Images.Clear();
             foreach (var url in musico.mediaUrl)
-                Images.Add(url);
+                _images.Add(url);
         }
     }
 
-        public void SetCarouselIndex(int index)
-        {
-            CurrentIndex = index;
-         }
+    [RelayCommand]
+    private void NextMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(1);
+        OnPropertyChanged(nameof(CurrentMonthDisplay));
+    }
 
-    
-        [RelayCommand]
-        private void NextImage()
-        {
-            if (CurrentIndex < Images.Count - 1) CurrentIndex++;
-        }
+    [RelayCommand]
+    private void PreviousMonth()
+    {
+        CurrentMonth = CurrentMonth.AddMonths(-1);
+        OnPropertyChanged(nameof(CurrentMonthDisplay));
+    }
 
-        [RelayCommand]
-        private void PrevImage()
+    [RelayCommand]
+    private void NextImage()
+    {
+        if (CurrentIndex < _images.Count - 1)
+            CurrentIndex++;
+    }
+
+    [RelayCommand]
+    private void PrevImage()
+    {
+        if (CurrentIndex > 0)
+            CurrentIndex--;
+    }
+
+    [RelayCommand]
+    private void SelectTab(string tabName)
+    {
+        IsGaleriaVisible = (tabName == "Galeria");
+        IsSobreVisible = (tabName == "Sobre");
+        IsAvaliacoesVisible = (tabName == "Avaliacoes");
+
+        TabGaleriaTextColor = IsGaleriaVisible ? _activeTabColor : _inactiveTabColor;
+        TabGaleriaFontAttributes = IsGaleriaVisible ? _activeFont : _inactiveFont;
+        BoxViewGaleriaHeightRequest = IsGaleriaVisible ? _activeBoxHeight : _inactiveBoxHeight;
+        BoxViewGaleriaBackgroundColor = IsGaleriaVisible ? _activeTabColor : _inactiveTabColor;
+
+        TabSobreTextColor = IsSobreVisible ? _activeTabColor : _inactiveTabColor;
+        TabSobreFontAttributes = IsSobreVisible ? _activeFont : _inactiveFont;
+        BoxViewSobreHeightRequest = IsSobreVisible ? _activeBoxHeight : _inactiveBoxHeight;
+        BoxViewSobreBackgroundColor = IsSobreVisible ? _activeTabColor : _inactiveTabColor;
+
+        TabAvaliacoesTextColor = IsAvaliacoesVisible ? _activeTabColor : _inactiveTabColor;
+        TabAvaliacoesFontAttributes = IsAvaliacoesVisible ? _activeFont : _inactiveFont;
+        BoxViewAvaliacoesHeightRequest = IsAvaliacoesVisible ? _activeBoxHeight : _inactiveBoxHeight;
+        BoxViewAvaliacoesBackgroundColor = IsAvaliacoesVisible ? _activeTabColor : _inactiveTabColor;
+    }
+
+    /*[RelayCommand]
+    public async Task LoadMusicianById(string nome)
+    {
+        try
         {
-            if (CurrentIndex > 0) CurrentIndex--;
+            var result = await _musicianService.GetMusicianByName(nome);
+            if (result != null && result.Any())
+            {
+                SetMusicianData(result.First());
+            }
         }
+        catch (Exception ex)
+        {
+            await App.Current.MainPage.DisplayAlert("Erro", $"Erro ao carregar músico: {ex.Message}", "OK");
+        }
+    }*/
+
+   
+
 }
-        

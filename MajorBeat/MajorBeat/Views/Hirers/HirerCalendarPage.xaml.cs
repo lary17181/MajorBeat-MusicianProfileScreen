@@ -1,17 +1,20 @@
-using MajorBeat.ViewModels.Hirer;
-namespace MajorBeat.Views.Hirers;
+using MajorBeat.Enums;
 using MajorBeat.Models;
+using MajorBeat.ViewModels.Hirer;
 using MajorBeat.Views.Musicians;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Tracing;
 
+namespace MajorBeat.Views.Hirers;
 
-public partial class MusicianProfileView : ContentPage
+public partial class HirerCalendarPage : ContentPage
 {
-    private MusicianProfileViewModel _viewModel;
-    public MusicianProfileView(Musico musico)
-    {
-        InitializeComponent();
+	public HirerCalendarPage()
+	{
+		InitializeComponent();
+        BindingContext = new HirerCalendarViewModel();
 
-        BindingContext = new MusicianProfileViewModel(musico);
+
     }
 
     private async void search_page_btn_Clicked(object sender, EventArgs e) =>
@@ -23,7 +26,4 @@ public partial class MusicianProfileView : ContentPage
     private async void profile_page_btn_Clicked(object sender, EventArgs e) =>
         await Navigation.PushAsync(new MusicianProfilePage());
 
-    private async void calendar_page_btn_Clicked(object sender, EventArgs e) =>
-        await Navigation.PushAsync(new HirerCalendarPage());
-}
-
+    }

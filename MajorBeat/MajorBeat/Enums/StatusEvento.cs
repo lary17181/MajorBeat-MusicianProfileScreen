@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace MajorBeat.Enums
 {
-    public enum InstrumentoEnum
+    public enum StatusEvento
     {
-        Violão,
-        Guitarra,
-        Bateria
+        NAO_PREENCHIDO,
+        PREENCHIDO
     }
 }

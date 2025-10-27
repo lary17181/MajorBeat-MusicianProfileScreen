@@ -1,6 +1,8 @@
 using MajorBeat.Models;
 using MajorBeat.ViewModels;
 using MajorBeat.ViewModels.Musician;
+using MajorBeat.Views.Hirers;
+using Microsoft.Extensions.Logging;
 
 
 namespace MajorBeat.Views.Musicians;
@@ -8,10 +10,13 @@ namespace MajorBeat.Views.Musicians;
 public partial class MusicianEventView : ContentPage
 {
 	public MusicianEventView(Evento evento)
-	{
+    {
 		InitializeComponent();
-		BindingContext = new MusicianEventViewModel(evento);
-	}
+        var vm = new MusicianEventViewModel(evento);
+
+        // Define o BindingContext
+        BindingContext = vm;
+    }
 
     private async void search_page_btn_Clicked(object sender, EventArgs e)
     {
@@ -27,8 +32,14 @@ public partial class MusicianEventView : ContentPage
     {
         await Navigation.PushAsync(new MusicianProfilePage());
     }
-    private async void voltar_Clicked(object sender, EventArgs e)
+
+    private async void Calendar_page_btn_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        await Navigation.PushAsync(new HirerCalendarPage());
     }
+    private async void Voltar_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new MusicianHomePage());
+    }
+
 }

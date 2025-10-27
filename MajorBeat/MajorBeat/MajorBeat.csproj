@@ -57,11 +57,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Views\Hirers\CalendarPage.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Remove="Views\Hirers\CalendarPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
+		<PackageReference Include="MongoDB.Bson" Version="3.5.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="Syncfusion.Maui.Calendar" Version="31.2.2" />
+		<PackageReference Include="Syncfusion.Maui.Core" Version="31.2.3" />
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="31.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -74,7 +86,7 @@
 	  <MauiXaml Update="Views\Bands\BandCreateProfile.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Hirers\CalendarPage.xaml">
+	  <MauiXaml Update="Views\Hirers\HirerCalendarPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Hirers\MusicianProfileView.xaml">

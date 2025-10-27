@@ -3,7 +3,7 @@
     x:Class="MajorBeat.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MajorBeat.Views"
+    xmlns:local="clr-namespace:MajorBeat.Views.Hirers"
     xmlns:viewsUsers="clr-namespace:MajorBeat.Views.Users"
     xmlns:viewMusicians="clr-namespace:MajorBeat.Views.Musicians"
     xmlns:viewHirers="clr-namespace:MajorBeat.Views.Hirers"
@@ -21,7 +21,7 @@
                ContentTemplate="{DataTemplate viewsBands:BandCreateProfile}"/>
 
         <ShellContent Icon="calendar.png"
-               ContentTemplate="{DataTemplate viewHirers:CalendarPage}"/>
+               ContentTemplate="{DataTemplate viewHirers:HirerCalendarPage}"/>
 
         <ShellContent Icon="profilehome.png"
             ContentTemplate="{DataTemplate viewMusicians:MusicianProfilePage}"/>

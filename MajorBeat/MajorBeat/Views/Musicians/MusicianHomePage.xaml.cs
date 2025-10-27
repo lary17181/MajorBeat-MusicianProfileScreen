@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MajorBeat.Views.Hirers;
 using MajorBeat.ViewModels.Hirer;
+using MajorBeat.ViewModels.Musician;
 namespace MajorBeat.Views.Musicians;
 
 
@@ -24,6 +25,9 @@ public partial class MusicianHomePage : ContentPage
         await Navigation.PushAsync(new MusicianProfilePage());
     }
 
+    private async void calendar_page_btn_Clicked(object sender, EventArgs e) =>
+        await Navigation.PushAsync(new HirerCalendarPage());
+
     private async void OnMusicianTapped(object sender, EventArgs e)
     {
         var musico = new Musico
@@ -35,15 +39,15 @@ public partial class MusicianHomePage : ContentPage
             endereco = "R. Alcântara, 113 - Vila Guilherme, São Paulo - SP",
             biografia = "Oi, eu sou o Marquinhos. Minha música é um pedaço de mim...",
             dtCriacao = DateTime.Now,
-            nomeInstrumento = new ObservableCollection<InstrumentoEnum>
+            nomeInstrumento = new ObservableCollection<NomeInstrumento>
         {
-            InstrumentoEnum.Guitarra,
-            InstrumentoEnum.Violão
+            NomeInstrumento.VOZ,
+            NomeInstrumento.VIOLAO
         },
-            nomeGenero = new ObservableCollection<GeneroEnum>
+            nomeGenero = new ObservableCollection<NomeGenero>
         {
-            GeneroEnum.Sertanejo,
-            GeneroEnum.Gospel
+            NomeGenero.MPB,
+            NomeGenero.SERTANEJO
         },
             links = new ObservableCollection<string>
         {
@@ -70,23 +74,24 @@ public partial class MusicianHomePage : ContentPage
     {
         var evento = new Evento
         {
+            IdEvento = 1,
             Titulo = "Panelão do Norte",
-            Descricao = "Uma noite especial com artistas locais...",
-            Endereco = "Av. Norte, 123 - São Paulo, SP",
-            Data = new DateTime(2025, 11, 20),
-            HoraInicio = new TimeSpan(20, 0, 0),
-            HoraFim = new TimeSpan(23, 30, 0),
-            NomeGenero = new ObservableCollection<GeneroEnum> { GeneroEnum.Sertanejo },
-            NomeInstrumento = new ObservableCollection<InstrumentoEnum> { InstrumentoEnum.Violão, InstrumentoEnum.Bateria },
-            ImagemLocalEvento = new ObservableCollection<byte[]>(),
+            Descricao = "Um evento voltado à valorização da música independente, com artistas locais e novas bandas.",
+            Endereco = "Rua Alcântara,113 - São Paulo, SP",
+            Data = new DateTime(2025, 10, 30),
+            HoraInicio = new TimeSpan(18, 0, 0),
+            HoraFim = new TimeSpan(23, 0, 0),
+            NomeGenero = new ObservableCollection<Enums.NomeGenero> { NomeGenero.MPB, NomeGenero.SERTANEJO },
+            NomeInstrumento = new ObservableCollection<NomeInstrumento> { NomeInstrumento.VOZ, NomeInstrumento.VIOLAO },
             Contratante = new Contratante
             {
                 Nome = "Panelão do Norte Produções"
-            }
-          
-        }; 
+            },
+        };
         await Navigation.PushAsync(new MusicianEventView(evento));
+        
     }
+
 }
     
     
