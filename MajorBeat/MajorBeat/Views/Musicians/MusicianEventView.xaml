@@ -27,19 +27,21 @@
                     <Image Source="back.png" HeightRequest="20" Margin="-330,0,0,0"   ZIndex="1"/>
                 </Grid>
 
-                <Grid HeightRequest="220">
-                <!--Carrossel de imagens-->
+              <Grid HeightRequest="220">
 
-                   <!-- <CarouselView ="{Binding Evento.ImagemLocalEvento}" Loop="True" IndicatorView="Indicator" Position="{Binding ImageIndice}">-->
-                    <CarouselView ItemsSource="{Binding ImagensMock}" Loop="True" IndicatorView="Indicator" Position="{Binding ImageIndice}">
+                    
+                        <Image Source="panelao.png" 
+                            Aspect="AspectFill"/>
+                       <!-- <CarouselView ItemsSource="{Binding ImagensExibicao}" Loop="True" IndicatorView="Indicator" Position="{Binding ImageIndice}">
+                    
                         <CarouselView.ItemTemplate>
-                            <DataTemplate><!--Converter={StaticResource ByteArrayToImageSourceConverter}-->
-                                <Image Source="{Binding .}"  Aspect="AspectFill" HeightRequest="220"/>
+                            <DataTemplate>
+                                <Image Source="{Binding Converter={StaticResource ByteArrayToImageSourceConverter}}"  Aspect="AspectFill" HeightRequest="220"/>
                             </DataTemplate>
                         </CarouselView.ItemTemplate>
-                    </CarouselView>
+                    </CarouselView>-->
 
-                    <IndicatorView x:Name="Indicator" IndicatorColor="LightGray" SelectedIndicatorColor="#4F1271" HorizontalOptions="Center" VerticalOptions="End" Margin="0, 0, 0, 10"/>
+                     <IndicatorView x:Name="Indicator" IndicatorColor="LightGray" SelectedIndicatorColor="#4F1271" HorizontalOptions="Center" VerticalOptions="End" Margin="0, 0, 0, 10"/>
 
                     <Frame BackgroundColor="#4F1271"  HorizontalOptions="End" VerticalOptions="End"  CornerRadius="5" Padding="5" Margin="10" HasShadow="False"  ZIndex="10"  IsVisible="{Binding TotalImages, Converter={StaticResource GreaterThanZeroConverter}}">
                         <Label Text="{Binding CountImages}"  TextColor="White"  FontSize="12" />
@@ -125,6 +127,7 @@
                     </StackLayout>
                 </StackLayout>
             </VerticalStackLayout>
+            
         </ScrollView>
         
         

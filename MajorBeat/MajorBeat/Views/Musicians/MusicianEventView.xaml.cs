@@ -9,15 +9,14 @@ namespace MajorBeat.Views.Musicians;
 
 public partial class MusicianEventView : ContentPage
 {
-	public MusicianEventView(Evento evento)
+    public MusicianEventView(long eventId)
     {
-		InitializeComponent();
-        var vm = new MusicianEventViewModel(evento);
+        InitializeComponent();
 
-        // Define o BindingContext
+        var vm = new MusicianEventViewModel(eventId);
         BindingContext = vm;
-    }
 
+    }
     private async void search_page_btn_Clicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new MusicianSearchPage());

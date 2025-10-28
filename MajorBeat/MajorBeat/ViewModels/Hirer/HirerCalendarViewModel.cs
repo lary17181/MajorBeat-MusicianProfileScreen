@@ -109,6 +109,14 @@ public partial class HirerCalendarViewModel : ObservableObject
             "Excluir Evento");
     }
 
+    [RelayCommand]
+    private async Task AbrirDetalhesEvento(Evento evento)
+    {
+        if (evento == null) return;
+
+        await Shell.Current.Navigation.PushAsync(new MusicianEventView(evento.IdEvento));
+    }
+
 
 
 }

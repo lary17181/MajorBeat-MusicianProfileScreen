@@ -83,12 +83,16 @@ public partial class MusicianHomePage : ContentPage
             HoraFim = new TimeSpan(23, 0, 0),
             NomeGenero = new ObservableCollection<Enums.NomeGenero> { NomeGenero.MPB, NomeGenero.SERTANEJO },
             NomeInstrumento = new ObservableCollection<NomeInstrumento> { NomeInstrumento.VOZ, NomeInstrumento.VIOLAO },
+            ImagemLocalEvento = new ObservableCollection<string>
+        {
+            "panelao.png"
+        },
             Contratante = new Contratante
             {
                 Nome = "Panelão do Norte Produções"
             },
         };
-        await Navigation.PushAsync(new MusicianEventView(evento));
+        await Navigation.PushAsync(new MusicianEventView(evento.IdEvento));
         
     }
 

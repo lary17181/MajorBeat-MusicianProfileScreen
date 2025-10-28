@@ -22,7 +22,7 @@ namespace MajorBeat.Models
 
         public string Endereco { get; set; }
 
-        public ObservableCollection<byte[]> ImagemLocalEvento { get; set; } = new();
+        public ObservableCollection<String> ImagemLocalEvento { get; set; } = new();
 
         public TimeSpan HoraInicio { get; set; }
         public TimeSpan HoraFim { get; set; }
